@@ -1,5 +1,5 @@
 use rand::{thread_rng, Rng};
-use std::io;
+use std::{fmt::Display, io};
 
 fn try_secret_gen() {
     let mut input_str: String = String::new();
@@ -101,10 +101,45 @@ fn immut_iterate() {
     }
 }
 
+enum Shape {
+    circle { radius: f64 },
+    rectangle { width: f64, length: f64 },
+}
+
+fn match_enum_struct(shape: &Shape) -> f64 {
+    match shape {
+        Shape::circle { radius } => 3.14 * radius * radius,
+        Shape::rectangle { width, length } => width * length,
+    }
+}
+
+impl Display for Shape {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Shape::circle { radius } => write!(f, "Circle with radius {}", radius),
+            Shape::rectangle { width, length } => {
+                write!(f, "rectangle with length{}, width {}", length, width)
+            }
+        }
+    }
+}
+
+fn test_enum_shape() {
+    let c = Shape::circle { radius: 4.2 };
+    let r = Shape::rectangle {
+        width: 2.3,
+        length: 5.3,
+    };
+
+    println!("{c} has area:{}", match_enum_struct(&c));
+    println!("{r} has area:{}", match_enum_struct(&r));
+}
+
 fn iter_update() {
     let mut names = vec![String::from("Test")];
 
-    for name in &mut names {
+    for name in names.iter_mut() {
+        //need .iter_mut or &mut
         name.push('1');
     }
 }
@@ -126,7 +161,9 @@ fn slice_string() {
 }
 
 fn main() {
-    immut_iterate();
+    test_enum_shape();
+
+    //immut_iterate();
     //slice_string()
     //mut_reference();
     //if_expression();

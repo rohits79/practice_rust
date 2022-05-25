@@ -160,9 +160,37 @@ fn slice_string() {
     println!("first word '{}'", word);
 }
 
-fn main() {
-    test_enum_shape();
+fn print_bytes() {
+    println!("{:08b}", 15);
+}
 
+fn largest_of_n<T: std::cmp::PartialEq + std::cmp::PartialOrd>(vector: &Vec<T>) -> Option<&T> {
+    let mut largest: Option<&T> = None;
+
+    for item in vector {
+        match largest {
+            Some(x) => {
+                if *item > *x {
+                    largest = Some(item);
+                }
+            }
+            None => largest = Some(item),
+        }
+    }
+
+    largest
+}
+
+fn main() {
+    let mut items = vec!["a", "b"];
+    if let Some(x) = largest_of_n(&items) {
+        println!("{x}");
+        items.clear();
+        println!("{x}");
+    }
+
+    //print_bytes();
+    //test_enum_shape();
     //immut_iterate();
     //slice_string()
     //mut_reference();
